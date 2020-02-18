@@ -1015,8 +1015,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainingSpheres:
   - {fileID: 1292384923}
-  - {fileID: 0}
+  - {fileID: 1275450036}
   - {fileID: 865816592}
+  - {fileID: 1326295904}
   testSpheres:
   - {fileID: 341789103}
   - {fileID: 1325427306}
@@ -1226,6 +1227,7 @@ MonoBehaviour:
   - {fileID: 920779264}
   - {fileID: 7300226}
   - {fileID: 326572793}
+  sphereRouges: {fileID: 0}
   myDropdown: {fileID: 0}
 --- !u!4 &90747597
 Transform:
