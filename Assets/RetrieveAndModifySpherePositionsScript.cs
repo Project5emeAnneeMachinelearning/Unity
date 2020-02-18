@@ -76,106 +76,167 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     }
 
  
-    public void Soft()
-    {
-        ReInitialize();
-        int quotaSuperieurZero = trainingSpheres.Length / 2;
-        for (var i = 0; i < trainingSpheres.Length; i++)
-        {
-            if (quotaSuperieurZero > 0)
-            {
-                var predictedZ = Random.Range(zmin, zmax);
-                var predictedX = Random.Range(xmin, xmax);
-                trainingSpheres[i].position = new Vector3(
-                   predictedX,
-                   1,
-                   predictedZ);
-            }
-            else
-            {
-                var predictedZ = Random.Range(zmin, zmax);
-                var predictedX = Random.Range(xmin, xmax);
-                trainingSpheres[i].position = new Vector3(
-                   predictedX,
-                   -1,
-                   predictedZ);
-            }
-            quotaSuperieurZero--;
-        }
-    }
+    //public void Soft(int taille)
+    //{
+    //    ReInitialize();
+    //    int quotaSuperieurZero = trainingSpheres.Length / 2;
+    //    for (int i = 0; i < trainingSpheres.Length; i++)
+    //    {
+           
+    //        if (quotaSuperieurZero > 0)
+    //        {
+    //            var predictedZ = Random.Range(zmin, -1);
+    //            var predictedX = Random.Range(xmin, xmax);
+    //            trainingSpheres[i].position = new Vector3(
+    //               predictedX,
+    //               1,
+    //               predictedZ);
+    //        }
+    //        else
+    //        {
+    //            var predictedZ = Random.Range(1, zmax);
+    //            var predictedX = Random.Range(xmin, xmax);
+    //            trainingSpheres[i].position = new Vector3(
+    //               predictedX,
+    //               -1,
+    //               predictedZ);
+    //        }
+    //        quotaSuperieurZero--;
+    //        if(i > taille)
+    //            trainingSpheres[i] = null;
+    //    }
+    //}
 
-    public void Xor()
-    {
-        ReInitialize();
-        int predictForY = Random.Range(1, 3);
-        switch (predictForY)
-        {
-            case 1 :
-                trainingSpheres[0].position = new Vector3(xmax, -1, zmin);
-                trainingSpheres[1].position = new Vector3(xmin, -1, zmax);
-                trainingSpheres[2].position = new Vector3(xmax, 1, zmax);
-                trainingSpheres[3].position = new Vector3(xmin, 1, zmin);
-                break;
-            case 2:
-                trainingSpheres[0].position = new Vector3(xmax, 1, zmin);
-                trainingSpheres[1].position = new Vector3(xmin, 1, zmax);
-                trainingSpheres[2].position = new Vector3(xmax, -1, zmax);
-                trainingSpheres[3].position = new Vector3(xmin, -1, zmin);
-                break;
-        }
-    }
+   
 
-    public void Real()
-    {
-        ReInitialize();
-        float predictedZ;
-        float predictedX;
-        int quotaSuperieurZero = trainingSpheres.Length / 2;
-        for (var i = 0; i < trainingSpheres.Length; i++)
-        {
+    //public void Xor()
+    //{
+    //    ReInitialize();
+    //    int predictForY = Random.Range(1, 3);
+    //    switch (predictForY)
+    //    {
+    //        case 1 :
+    //            Instantiate(sphereRouges, new Vector3(xmax, -1, zmin), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmin, -1, zmax), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmax, 1, zmin), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmin, 1, zmin), Quaternion.identity);
+    //            /*trainingSpheres[0].position = new Vector3(xmax, -1, zmin);
+    //            trainingSpheres[1].position = new Vector3(xmin, -1, zmax);
+    //            trainingSpheres[2].position = new Vector3(xmax, 1, zmax);
+    //            trainingSpheres[3].position = new Vector3(xmin, 1, zmin);*/
+    //            break;
+    //        case 2:
+    //            Instantiate(sphereRouges, new Vector3(xmax, 1, zmin), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmin, 1, zmax), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmax, -1, zmin), Quaternion.identity);
+    //            Instantiate(sphereRouges, new Vector3(xmin, -1, zmin), Quaternion.identity);
+    //            /*
+    //            trainingSpheres[0].position = new Vector3(xmax, 1, zmin);
+    //            trainingSpheres[1].position = new Vector3(xmin, 1, zmax);
+    //            trainingSpheres[2].position = new Vector3(xmax, -1, zmax);
+    //            trainingSpheres[3].position = new Vector3(xmin, -1, zmin);*/
+    //            break;
+    //    }
+    //}
 
-            if (quotaSuperieurZero > 0)
-            {
-               predictedZ = Random.Range(zmin, 1);
-               predictedX = Random.Range(xmin, 0);
-                trainingSpheres[i].position = new Vector3(
-               predictedX,
-               1,
-               predictedZ);
-            }
-            else
-            {
-                predictedZ = Random.Range(2, zmax);
-                predictedX = Random.Range(1, xmax);
-                trainingSpheres[i].position = new Vector3(
-               predictedX,
-               1,
-               predictedZ);
-            }
-            quotaSuperieurZero--;
+    //public void Real()
+    //{
+    //    ReInitialize();
+    //    float predictedZ;
+    //    float predictedX;
+    //    int quotaSuperieurZero = trainingSpheres.Length / 2;
+    //    for (var i = 0; i < trainingSpheres.Length; i++)
+    //    {
+
+    //        if (quotaSuperieurZero > 0)
+    //        {
+    //           predictedZ = Random.Range(zmin, 1);
+    //           predictedX = Random.Range(xmin, 0);
+    //            trainingSpheres[i].position = new Vector3(
+    //           predictedX,
+    //           1,
+    //           predictedZ);
+    //        }
+    //        else
+    //        {
+    //            predictedZ = Random.Range(2, zmax);
+    //            predictedX = Random.Range(1, xmax);
+    //            trainingSpheres[i].position = new Vector3(
+    //           predictedX,
+    //           1,
+    //           predictedZ);
+    //        }
+    //        quotaSuperieurZero--;
             
-        }
+    //    }
 
-    }
+    //}
+
+    //public void Cross()
+    //{
+    //    ReInitialize();
+    //    float predictedZ;
+    //    float predictedX;
+    //    var positionSquare = Random.Range(1, 5);
+
+    //    int quotaSuperieurZero = trainingSpheres.Length / 2;
+    //    for (var i = 0; i < trainingSpheres.Length; i++)
+    //    {
+
+    //        if (quotaSuperieurZero > 0)
+    //        {
+    //            predictedZ = Random.Range(zmin, 1);
+    //            predictedX = Random.Range(xmin, 0);
+    //            trainingSpheres[i].position = new Vector3(
+    //           predictedX,
+    //           1,
+    //           predictedZ);
+    //        }
+    //        else
+    //        {
+    //            predictedZ = Random.Range(2, zmax);
+    //            predictedX = Random.Range(1, xmax);
+    //            trainingSpheres[i].position = new Vector3(
+    //           predictedX,
+    //           1,
+    //           predictedZ);
+    //        }
+    //        quotaSuperieurZero--;
+
+    //    }
+    //}
 
     public void ReleaseModel()
     {
         // FreeLinearModel(model);
     }
 
-    public void chooseFunction(Dropdown target)
-    {
-        Debug.Log(target.value);
-        switch(target.value)
-        {
-            case 0: Soft();
-                break;
-            case 1: Xor();
-                break;
-            case 2: Real();
-                break;
-            default: ReInitialize();
-                break;
-        }
-    }
+    //public void chooseFunction(Dropdown target)
+    //{
+    //    Debug.Log(target.value);
+    //    switch(target.value)
+    //    {
+    //        case 0: Soft(2);
+    //            break;
+    //        case 1: Xor();
+    //            break;
+    //        case 2: Real();
+    //            break;
+    //        default: ReInitialize();
+    //            break;
+    //    }
+    //}
+
+    //public void chooseFunctionWithMultipleSpheres(Dropdown target)
+    //{
+    //    switch (target.value)
+    //    {
+    //        case 3: Cross();
+    //            break;
+    //        default: ReInitialize();
+    //            break;
+    //    }
+    //}
+
+
 }
