@@ -22,13 +22,8 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     public static extern void train_classif(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, double pas, int sizeIndice, int epoch);
 
     [DllImport("machine_learning_lib.dylib")]
-    public static extern void train_regression(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, int sizeIndice);
-
-    [DllImport("machine_learning_lib.dylib")]
     public static extern double predict_classif(IntPtr model, double[] values);
 
-    [DllImport("machine_learning_lib.dylib")]
-    public static extern double predict_regression(IntPtr model, double[] values);
 
     public void ReInitialize()
     {
@@ -60,7 +55,6 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
         train_classif(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 0.01,  2, 1000000);
-        //train_regression(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 2);
         Debug.Log("Train fait");
 
         // TrainLinearModelRosenblatt(model, trainingInputs, 2, trainingSpheres.Length, trainingExpectedOutputs, 1, 0.01, 1000)
@@ -72,7 +66,6 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
         {
             var input = new double[] {testSpheres[i].position.x, testSpheres[i].position.z};
             double predictedY = predict_classif(model, input);
-            //double predictedY = predict_regression(model, input);
             //var predictedY = PredictXXXLinearModel(model, input, 2)
             //var predictedY = Random.Range(-5, 5);
             testSpheres[i].position = new Vector3(
