@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
@@ -10,15 +9,26 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
 
     public Transform[] testSpheres;
 
-    public Dropdown myDropdown;
-
     private double[] trainingInputs;
 
     private double[] trainingExpectedOutputs;
 
     private IntPtr model;
 
-    private float xmax = 0, xmin = 0, zmax = 0, zmin =0;
+    [DllImport("machine_learning_lib.dylib")]
+    public static extern IntPtr create(int indiceNumber);
+
+    [DllImport("machine_learning_lib.dylib")]
+    public static extern void train_classif(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, double pas, int sizeIndice, int epoch);
+
+    [DllImport("machine_learning_lib.dylib")]
+    public static extern void train_regression(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, int sizeIndice);
+
+    [DllImport("machine_learning_lib.dylib")]
+    public static extern double predict_classif(IntPtr model, double[] values);
+
+    [DllImport("machine_learning_lib.dylib")]
+    public static extern double predict_regression(IntPtr model, double[] values);
 
     public void ReInitialize()
     {
@@ -29,20 +39,13 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
                 0f,
                 testSpheres[i].position.z);
 
-            if (xmax < testSpheres[i].position.x)
-                xmax = testSpheres[i].position.x;
-            if (xmin > testSpheres[i].position.x)
-                xmin = testSpheres[i].position.x;
-            if (zmax < testSpheres[i].position.z)
-                zmax = testSpheres[i].position.z;
-            if (zmin > testSpheres[i].position.z)
-                zmin = testSpheres[i].position.z;
         }
     }
     
     public void CreateModel()
     {
-        //model = CreateLinearModel(2, 1);
+        model = create(2);
+        Debug.Log(model);
     }
 
     public void Train()
@@ -52,11 +55,17 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
 
         for (var i = 0; i < trainingSpheres.Length; i++)
         {
+            Debug.Log("Train infore");
             trainingInputs[2 * i] = trainingSpheres[i].position.x;
             trainingInputs[2 * i + 1] = trainingSpheres[i].position.z;
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
-        
+
+        Debug.Log("Train before");
+
+        //train_classif(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 0.01,  2, 1000000);
+        train_regression(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 2);
+        Debug.Log(model);
         // TrainLinearModelRosenblatt(model, trainingInputs, 2, trainingSpheres.Length, trainingExpectedOutputs, 1, 0.01, 1000)
     }
 
@@ -64,17 +73,20 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     {
         for (var i = 0; i < testSpheres.Length; i++)
         {
+            Debug.Log("before predict");
             var input = new double[] {testSpheres[i].position.x, testSpheres[i].position.z};
+            //double predictedY = predict_classif(model,input);
+            double predictedY = predict_regression(model, input);
             //var predictedY = PredictXXXLinearModel(model, input, 2)
-            var predictedY = Random.Range(-5, 5);
+            //var predictedY = Random.Range(-5, 5);
+            Debug.Log(predictedY);
             testSpheres[i].position = new Vector3(
                 testSpheres[i].position.x,
-                predictedY,
+                (float) predictedY,
                 testSpheres[i].position.z);
         }
 
     }
-
  
     //public void Soft(int taille)
     //{
