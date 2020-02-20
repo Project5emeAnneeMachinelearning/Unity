@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
+public class PredictRegression : MonoBehaviour
 {
     public Transform[] trainingSpheres;
 
@@ -19,13 +18,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     public static extern IntPtr create(int indiceNumber);
 
     [DllImport("machine_learning_lib.dylib")]
-    public static extern void train_classif(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, double pas, int sizeIndice, int epoch);
-
-    [DllImport("machine_learning_lib.dylib")]
     public static extern void train_regression(IntPtr model, double[] dataset, double[] expected_output, int sizedataset, int sizeIndice);
-
-    [DllImport("machine_learning_lib.dylib")]
-    public static extern double predict_classif(IntPtr model, double[] values);
 
     [DllImport("machine_learning_lib.dylib")]
     public static extern double predict_regression(IntPtr model, double[] values);
@@ -41,7 +34,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
 
         }
     }
-    
+
     public void CreateModel()
     {
         model = create(2);
@@ -59,7 +52,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingInputs[2 * i + 1] = trainingSpheres[i].position.z;
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
-        train_classif(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 0.01,  2, 1000000);
+        train_regression(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 2);
         //train_regression(model, trainingInputs, trainingExpectedOutputs, trainingInputs.Length, 2);
         Debug.Log("Train fait");
 
@@ -70,14 +63,13 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     {
         for (var i = 0; i < testSpheres.Length; i++)
         {
-            var input = new double[] {testSpheres[i].position.x, testSpheres[i].position.z};
-            double predictedY = predict_classif(model, input);
-            //double predictedY = predict_regression(model, input);
+            var input = new double[] { testSpheres[i].position.x, testSpheres[i].position.z };
+            double predictedY = predict_regression(model, input);
             //var predictedY = PredictXXXLinearModel(model, input, 2)
             //var predictedY = Random.Range(-5, 5);
             testSpheres[i].position = new Vector3(
                 testSpheres[i].position.x,
-                (float) predictedY,
+                (float)predictedY,
                 testSpheres[i].position.z);
         }
     }
